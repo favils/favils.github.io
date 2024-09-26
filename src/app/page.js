@@ -2,12 +2,50 @@
 
 import Image from "next/image";
 import styles from "./page.module.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { gsap } from "gsap";
 import { CustomEase } from "gsap/CustomEase";
 
 export default function Home() {
-  
+  const [cursorStyle, setCursorStyle] = useState({ top: '0px', left: '0px' });
+  const [isHovered, setIsHovered] = useState(false);
+
+  useEffect(() => {
+    gsap.registerPlugin(CustomEase);
+    CustomEase.create(
+      "hop", 
+      "M0,0 C0.2,0.012 0.329,0.053 0.487,0.201 0.679,0.381 0.465,1 1,1"
+    );
+
+    // Function to update cursor position
+    const updateCursor = (e) => {
+      setCursorStyle({ top: `${e.clientY}px`, left: `${e.clientX}px` });
+    };
+
+    // Mouse enter and leave events for links
+    const handleMouseEnter = () => setIsHovered(true);
+    const handleMouseLeave = () => setIsHovered(false);
+
+    // Add event listeners for mouse movements
+    document.addEventListener("mousemove", updateCursor);
+
+    // Select all links and add hover events
+    const links = document.querySelectorAll("a");
+    links.forEach(link => {
+      link.addEventListener("mouseenter", handleMouseEnter);
+      link.addEventListener("mouseleave", handleMouseLeave);
+    });
+
+    // Cleanup event listeners on component unmount
+    return () => {
+      document.removeEventListener("mousemove", updateCursor);
+      links.forEach(link => {
+        link.removeEventListener("mouseenter", handleMouseEnter);
+        link.removeEventListener("mouseleave", handleMouseLeave);
+      });
+    };
+  }, []);
+
   useEffect(() => {
     gsap.registerPlugin(CustomEase);
     CustomEase.create(
@@ -78,7 +116,7 @@ export default function Home() {
         ease: "hop",
         onStart: () => {
           gsap.to(".hero", {
-            transform: "translate(-50%, -50%) scale(1)",
+            transform: "translate(-50%, -50%) scale(.8)",
             duration: 2.25,
             ease: "power3.inOut",
             delay: 0.25,
@@ -129,7 +167,6 @@ export default function Home() {
           <div className="nav-col">
             <div className="nav-items">
               <a href="#">work</a>
-              <a href="#">studio</a>
               <a href="#">contact</a>
             </div>
             <div className="nav-items">
@@ -149,7 +186,12 @@ export default function Home() {
         <div className="hero-img">
           <img src="bg.png"/>
         </div>
+        
       </section>
+      <div 
+          className={`custom-cursor ${isHovered ? 'hovered' : ''}`} 
+          style={cursorStyle}
+        />
     </div>
   );
 }
