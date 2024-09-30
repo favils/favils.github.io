@@ -3,55 +3,15 @@
 import Image from "next/image";
 import styles from "./page.module.css";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { gsap } from "gsap";
 import { CustomEase } from "gsap/CustomEase";
 
 export default function Home() {
-  const [cursorStyle, setCursorStyle] = useState({ top: '0px', left: '0px' });
-  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     gsap.registerPlugin(CustomEase);
-    CustomEase.create(
-      "hop", 
-      "M0,0 C0.2,0.012 0.329,0.053 0.487,0.201 0.679,0.381 0.465,1 1,1"
-    );
-
-    // Function to update cursor position
-    const updateCursor = (e) => {
-      setCursorStyle({ top: `${e.clientY}px`, left: `${e.clientX}px` });
-    };
-
-    // Mouse enter and leave events for links
-    const handleMouseEnter = () => setIsHovered(true);
-    const handleMouseLeave = () => setIsHovered(false);
-
-    // Add event listeners for mouse movements
-    document.addEventListener("mousemove", updateCursor);
-
-    // Select all links and add hover events
-    const links = document.querySelectorAll("a");
-    links.forEach(link => {
-      link.addEventListener("mouseenter", handleMouseEnter);
-      link.addEventListener("mouseleave", handleMouseLeave);
-    });
-
-    // Cleanup event listeners on component unmount
-    return () => {
-      document.removeEventListener("mousemove", updateCursor);
-      links.forEach(link => {
-        link.removeEventListener("mouseenter", handleMouseEnter);
-        link.removeEventListener("mouseleave", handleMouseLeave);
-      });
-    };
-  }, []);
-
-  useEffect(() => {
-    gsap.registerPlugin(CustomEase);
-    CustomEase.create(
-      "hop", 
-      "M0,0 C0.2,0.012 0.329,0.053 0.487,0.201 0.679,0.381 0.465,1 1,1"
-    );
+    CustomEase.create("hop", "M0,0 C0.2,0.012 0.329,0.053 0.487,0.201 0.679,0.381 0.465,1 1,1");
 
     function splitTextIntoSpans(selector) {
       let elements = document.querySelectorAll(selector);
@@ -77,10 +37,7 @@ export default function Home() {
         const elapsedTime = Date.now() - startTime;
         
         if(elapsedTime < maxDuration) {
-          currentValue = Math.min(
-            currentValue + Math.floor(Math.random() * 30) + 5,
-            endValue
-          );
+          currentValue = Math.min(currentValue + Math.floor(Math.random() * 30) + 5, endValue);
           counterElement.textContent = currentValue;
           setTimeout(updateCounter, updateInterval);
         } else {
@@ -93,7 +50,7 @@ export default function Home() {
               onStart: () => {
                 revealLandingPage();
               },
-            })
+            });
           }, -500); 
         }
       }
@@ -142,7 +99,7 @@ export default function Home() {
             duration: 2,
             ease: "power4.inOut",
             delay: 0.75,
-          })
+          });
         }
       });
     }
@@ -166,7 +123,7 @@ export default function Home() {
           </div>
           <div className="nav-col">
             <div className="nav-items">
-              <a href="#">work</a>
+              <a href="/work">work</a>
               <a href="#">contact</a>
             </div>
             <div className="nav-items">
@@ -184,14 +141,10 @@ export default function Home() {
         </div>
 
         <div className="hero-img">
-          <img src="bg.png"/>
+          <img src="bg.png" />
         </div>
         
       </section>
-      <div 
-          className={`custom-cursor ${isHovered ? 'hovered' : ''}`} 
-          style={cursorStyle}
-        />
     </div>
   );
 }

@@ -5,31 +5,40 @@
   font-style: normal;
 }
 
-.custom-cursor {
-  position: fixed;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background-color: white;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  z-index: 9999;
-  transition: transform 0.2s ease;
-}
-
-.hovered {
-  transform: translate(-50%, -50%) scale(1.5);
-  opacity: 30%;
-}
-
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+.cursor, .cursorDot {
+  pointer-events: none;
+}
+
+.cursor {
+  height: 50px;
+  width: 50px;
+  border: 2px solid #1a1a1a;
+  border-radius: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+.hover {
   cursor: none;
 }
 
+.cursorDot {
+  height: 15px;
+  width: 15px;
+  background: #1a1a1a;
+  border-radius: 50%;
+  position: absolute;
+}
+
 html, body {
+  cursor: none;
+  overflow: hidden;
   width: 100%;
   height: 100%;
   font-family: 'TestSohneBreit';
@@ -84,6 +93,7 @@ p,a {
   clip-path: polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%);
   will-change: transform;
   z-index: 1;
+  overflow: hidden;
 }
 
 .overlay {
